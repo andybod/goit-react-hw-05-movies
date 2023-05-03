@@ -6,6 +6,7 @@ import { Suspense, lazy } from 'react';
 // import Reviews from './Reviews/Reviews';
 // import Cast from './Cast/Cast';
 import AppBar from './AppBar/AppBar';
+import NotFoundView from './NotFoundView/NotFoundView';
 
 const HomePage = lazy(() => import('./HomePage/HomePage'));
 const MoviesPage = lazy(() => import('./MoviesPage/MoviesPage'));
@@ -22,12 +23,12 @@ export const App = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route index element={<HomePage />}></Route>
-          <Route path="/movies" element={<MoviesPage />}></Route>
-          <Route path="/movies/:movieId/" element={<MovieDetailsPage />}>
-            <Route path="/movies/:movieId/reviews" element={<Reviews />} />
-            <Route path="/movies/:movieId/cast" element={<Cast />} />
+          <Route path="movies/" element={<MoviesPage />}></Route>
+          <Route path="movies/:movieId/" element={<MovieDetailsPage />}>
+            <Route path="reviews" element={<Reviews />} />
+            <Route path="cast" element={<Cast />} />
           </Route>
-          <Route path="*" element={<HomePage />} />
+          <Route path="*" element={<NotFoundView />} />
         </Routes>
       </Suspense>
     </>
