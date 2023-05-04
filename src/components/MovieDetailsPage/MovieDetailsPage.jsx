@@ -12,6 +12,8 @@ import { fetchMoviesDetails } from 'services/movies-api';
 import css from './MovieDetailsPage.module.css';
 import Container from 'components/Container/Container';
 import PageHeading from 'components/PageHeading/PageHeading';
+import { Suspense } from 'react';
+import plug from '../../images/broken_img.png';
 
 const MovieDetailsPage = () => {
   const [movie, setMovie] = useState(null);
@@ -23,7 +25,7 @@ const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-
+  //   console.log(movie.poster_path);
   let activeClassName = {
     color: '#2196f3',
   };
@@ -55,7 +57,12 @@ const MovieDetailsPage = () => {
         {movie && (
           <div>
             <img
-              src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
+              src={
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w200/${movie.poster_path}`
+                  : plug
+              }
+              //   src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
               alt={movie.title}
             />
             <h3>{movie.title}</h3>
@@ -68,26 +75,31 @@ const MovieDetailsPage = () => {
           </div>
         )}
         <hr />
-        <div>
-          <h2>Additional Information</h2>
-          <NavLink
-            to={`/movies/${movieId}/reviews`}
-            style={({ isActive }) => (isActive ? activeClassName : undefined)}
-            state={location.state}
-          >
-            <p className={css.reviews}>Reviews</p>
-          </NavLink>
+        {!error && (
+          <div>
+            <h2>Additional Information</h2>
+            <NavLink
+              to={`/movies/${movieId}/reviews`}
+              style={({ isActive }) => (isActive ? activeClassName : undefined)}
+              state={location.state}
+            >
+              <p className={css.reviews}>Reviews</p>
+            </NavLink>
 
-          <NavLink
-            to={`/movies/${movieId}/cast`}
-            style={({ isActive }) => (isActive ? activeClassName : undefined)}
-            state={location.state}
-          >
-            <p className={css.cast}>Cast</p>
-          </NavLink>
-          <hr />
+            <NavLink
+              to={`/movies/${movieId}/cast`}
+              style={({ isActive }) => (isActive ? activeClassName : undefined)}
+              state={location.state}
+            >
+              <p className={css.cast}>Cast</p>
+            </NavLink>
+            <hr />
+          </div>
+        )}
+
+        <Suspense>
           <Outlet />
-        </div>
+        </Suspense>
       </Container>
     </>
   );

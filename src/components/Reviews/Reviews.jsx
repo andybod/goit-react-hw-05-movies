@@ -23,6 +23,7 @@ const Reviews = () => {
   return (
     <>
       {error && <div>{error}</div>}
+      {!reviews.length && <h2>There are no reviews</h2>}
       <ul>
         {reviews.map(review => {
           return (

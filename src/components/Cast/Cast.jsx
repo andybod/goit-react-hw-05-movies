@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchMoviesCredits } from 'services/movies-api';
 import css from './Cast.module.css';
+import plug from '../../images/broken_img.png';
 
 const Cast = () => {
   const { movieId } = useParams();
@@ -10,7 +11,6 @@ const Cast = () => {
   const [cast, setCast] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     const fetchCast = async () => {
       try {
@@ -30,12 +30,17 @@ const Cast = () => {
     <>
       {loading && 'Loading...'}
       {error && <div>{error}</div>}
+      {!cast.length && <h2>There is no cast list</h2>}
       <ul className={css.castList}>
         {cast.map(castItem => {
           return (
             <li key={castItem.id} className={css.castItem}>
               <img
-                src={`https://image.tmdb.org/t/p/w300${castItem.profile_path}`}
+                src={
+                  castItem.profile_path
+                    ? `https://image.tmdb.org/t/p/w300${castItem.profile_path}`
+                    : plug
+                }
                 alt={`${castItem.name} portrait`}
               />
               <div>
